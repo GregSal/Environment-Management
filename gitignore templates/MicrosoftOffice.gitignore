@@ -1,0 +1,218 @@
+#
+#############################################################################
+# Contains common file extensions for Microsoft Office Applications.        #
+# The first section contains temporary file, lock file and backup file      #
+# patterns.  These are set to be ignored by default.                        #
+#                                                                           #
+# The second section contains various Microsoft Office application          #
+# file Extensions.   These are not ignored by default. Uncomment ones       #
+# you wish to ignore.                                                       #
+#                                                                           #
+# Information for these extensions was obtained from:                       #
+#https://en.wikipedia.org/wiki/List_of_Microsoft_Office_filename_extensions #
+#https://en.wikipedia.org/wiki/Microsoft_Access#File_extensions             #
+#############################################################################
+
+###################################################################
+# Microsoft Office Temporary and Lock Files (Ignored by default). #
+###################################################################
+#
+
+#Legacy tmp files
+*.tmp
+#Word temporary files
+~$*.do*
+#Excel temporary files
+~$*.xls*
+#PowerPoint temporary files
+~$*.ppt*
+#Microsoft Publisher temporary files
+~$*.ppt*
+#Visio autosave temporary files
+*.~vsd*
+#Access lock files
+*.laccdb
+
+############################################################
+# Microsoft Office Auto Backup Files (Ignored by default). #
+############################################################
+
+# Legacy Word document backup files
+*.wbk
+#Excel Backup Files
+*.xlk
+#Word Auto Backup Files
+Backup of *.do*
+#
+#########################################################
+# Various Microsoft Office Application File Extensions. #
+# These are not ignored by default.                     #
+# Uncomment Ones You Wish to Ignore.                    #
+#########################################################
+#
+#Microsoft XPS Documents
+#*.xps
+
+
+# Microsoft Outlook Files
+#Outlook Message Files
+#*.msg
+#Outlook Templates
+#*.oft
+#Outlook add-in file
+#*.ecf
+
+# Microsoft Publisher Files
+#*.pub
+
+# Microsoft OneNote Files
+#OneNote Section files
+#*.one
+#OneNote Index and Launcher Files
+#Open Notebook.onetoc2
+
+# Microsoft Word File Extensions
+#Legacy Word Files
+#*.doc
+#Legacy Word templates
+#*.dot
+#Word Files
+#*.docx
+#Word macro-enabled document
+#*.docm
+#Word templates
+#*.dotx
+#Word macro-enabled templates
+#*.dotm
+#Word binary document
+#*.docb
+#Word add-in
+#*.wll
+#Word add-in
+#*.wwl
+
+# Microsoft Excel File Extensions
+#Legacy Excel Files
+#*.xls
+#Legacy Excel templates
+#*.xlt
+#Legacy Excel macros
+#*.xlm
+#Legacy Excel for Mac add-ins
+#*.xll_
+#*.xla_
+#*.xla5
+#*.xla8
+#Excel Files
+#*.xlsx
+#Excel macro-enabled workbooks
+#*.xlsm
+#Excel templates
+#*.xltx
+#Excel macro-enabled template
+#*.xltm
+#Excel binary worksheets
+#*.xlsb
+#Excel add-ins that can contain macros
+#*.xla
+#Excel macro-enabled add-ins
+#*.xlam
+#Excel XLL add-ins
+#*.xll
+#Excel work spaces
+#*.xlw
+
+# Microsoft PowerPoint File Extensions
+#Legacy PowerPoint Files
+#*.ppt
+#Legacy PowerPoint template
+#*.pot
+#Legacy PowerPoint slideshow
+#*.pps
+#Legacy PowerPoint add-in
+#*.ppa
+#Legacy PowerPointadd-in with macros enabled
+#*.ppam
+#PowerPoint presentation
+#*.pptx
+#PowerPoint macro-enabled presentation
+#*.pptm
+#PowerPoint template
+#*.potx
+#PowerPoint macro-enabled template
+#*.potm
+#PowerPoint add-in
+#*.ppam
+#PowerPoint slideshow
+#*.ppsx
+#PowerPoint macro-enabled slideshow
+#*.ppsm
+#PowerPoint slide
+#*.sldx
+#PowerPoint macro-enabled slide
+#*.sldm
+#PowerPoint add-in
+#*.pa
+
+#
+#########################################################
+# Microsoft Access Application File Extensions.         #
+# These are not ignored by default.                     #
+# Uncomment Ones You Wish to Ignore.                    #
+#########################################################
+#
+
+#######################################
+# Microsoft Access Legacy formats     #
+#######################################
+#Legacy Access files
+#*.mdb
+#Protected Access Data Project (not supported in 2013)
+#*.ade
+Access Data Project (not supported in 2013)
+#*.adp
+#Access Database (2003 and earlier)
+#*.mdb
+Access Database (Pocket Access for Windows CE)
+#*.cdb
+#Access Database, used for addins (Access 2, 95, 97),
+#previously used for workgroups (Access 2)
+#*.mda
+Access Blank Database Template (2003 and earlier)
+#*.mdn
+#Access (SQL Server) detached database (2000)
+#*.mdf
+Protected Access Database, with compiled VBA and macros (2003 and earlier)
+#*.mde
+#Access lock files (associated with .mdb)
+#*.ldb
+
+#########################################################
+# Microsoft Access Databases Files (2007 and later)     #
+#########################################################
+#Access files
+#*.accdb
+#"execute only" Access files
+#*.accde
+#runtime mode  Access files
+#*.accdr
+#Access Database Templates
+#*.accdt
+#Access add-in files
+#*.accda
+#*.accdu
+#*.mde
+#Access Blank Project Template
+#*.adn
+Access Workgroups
+#*.mdw
+#Access Macros
+#*.mam
+#Access Querys
+#*.maq
+#Access Reports
+#*.mar
+#Access Tables
+#*.mat
+#Access Forms
+#*.maf

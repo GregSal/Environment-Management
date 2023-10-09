@@ -1,0 +1,91 @@
+CALL C:\ProgramData\Anaconda3\Scripts\activate.bat C:\ProgramData\Anaconda3
+
+
+########## Creation command ############
+conda create --name plan_check_tools python=3.9
+conda activate plan_check_tools
+conda install docx2txt imageio matplotlib numpy pandas openpyxl pydicom pyodbc PySimpleGUI scipy shapely scikit-image xlwings FastAPI uvicorn scikit-learn
+#### Standard Tools ####
+conda install spyder jupyterlab nb_conda_kernels ipympl pylint pyinstaller black mypy
+
+
+########## Store Environment ############
+cd environment
+conda list --explicit > plan_check_tools_specfile.txt
+conda env export > plan_check_tools_FULL.yml
+conda env export --from-history > plan_check_tools.yml
+pip freeze > requirements.txt
+
+
+########## xlwings Configure commands ############
+xlwings license update -k noncommercial
+xlwings addin install
+xlwings config create --force
+
+
+########## Install command ############
+conda create --name plan_check_tools --file "C:\TEMP\plan_check_tools_specfile.txt"
+
+conda env create --name plan_check_tools --file="C:\TEMP\plan_check_tools.yml"
+
+
+########### Related Commands  ##########
+conda config --append channels conda-forge
+
+conda activate plan_check_tools
+
+
+#### Removing Environment ####
+
+conda deactivate
+
+conda remove --name plan_check_tools --all
+
+xlwings addin uninstall
+
+#### Primary Packages ####
+python >= 3.9
+docx2txt
+imageio
+matplotlib
+numpy
+pandas
+openpyxl
+pydicom
+pyodbc
+PySimpleGUI
+scipy
+scikit-learn
+shapely
+scikit-image
+xlwings
+FastAPI
+uvicorn
+
+#### Tool Packages ####
+spyder
+jupyterlab
+nb_conda_kernels
+ipympl
+pylint
+pyinstaller
+black
+mypy
+
+
+########## Spyder Launch ############
+C:\ProgramData\Anaconda3\pythonw.exe C:\ProgramData\Anaconda3\cwp.py C:\ProgramData\Anaconda3\envs\plan_check_tools C:\ProgramData\Anaconda3\envs\plan_check_tools\pythonw.exe C:\ProgramData\Anaconda3\envs\plan_check_tools\Scripts\spyder-script.py
+
+########## Jupyter Lab Launch ############
+C:\ProgramData\Anaconda3\python.exe C:\ProgramData\Anaconda3\cwp.py C:\Users\Greg\.conda\envs\plan_check_tools C:\Users\Greg\.conda\envs\plan_check_tools\python.exe C:\Users\Greg\.conda\envs\plan_check_tools\Scripts\jupyter-lab-script.py "W:\Plan Checking\Plan Check Tools"
+
+"W:\Plan Checking\Plan Check Tools"
+%ALLUSERSPROFILE%\Anaconda3\Menu\jupyter.ico
+%ALLUSERSPROFILE%\Anaconda3\envs\Standard\Scripts\spyder.ico
+
+
+########## quickstart Launch ############
+xlwings quickstart myproject.
+xlwings quickstart demo --fastapi
+python -c "import secrets; print(secrets.token_hex(32))"
+set XLWINGS_API_KEY=8ad697bef664e14173558b530096bce0a7a0f3ec1ca9d59698ae5487061beb28

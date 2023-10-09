@@ -1,0 +1,59 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "python.envFile": "${workspaceFolder}/.env",
+        "python.defaultInterpreterPath": "%env_path%/python.exe",
+        "python.analysis.extraPaths": "%analysis.extraPaths%",
+        "python.autoComplete.extraPaths": "%autoComplete.extraPaths%",
+        "jupyter.notebookFileRoot": "${fileDirname}",
+        "jupyter.themeMatplotlibPlots": false,
+        "terminal.integrated.env.windows": {
+            "cwd": "${workspaceFolder}",
+            "PYTHONPATH": "%PYTHONPATH%",
+        },
+        "terminal.integrated.cwd": "${workspaceFolder}",
+        "terminal.integrated.profiles.windows": {
+            "Conda": {
+              "path": "C:/WINDOWS/System32/cmd.exe",
+              "args": ["/K", "C:/ProgramData/Anaconda3/Scripts/activate.bat C:/ProgramData/Anaconda3"],
+              "icon": "terminal-bash",
+              "color": "terminal.ansiCyan",
+              "env": {"PYTHONPATH": "%PYTHONPATH%"}
+            },
+            "CondaPS": {
+                "source": "PowerShell",
+                "args": ["-ExecutionPolicy", "ByPass", "-NoExit", "-Command", "& 'C:/ProgramData/Anaconda3/shell/condabin/conda-hook.ps1' ; conda activate 'C:/ProgramData/Anaconda3'"],
+                "icon": "terminal-powershell",
+                "color": "terminal.ansiCyan",
+                "env": {"PYTHONPATH": "%PYTHONPATH%"}
+            },
+            "PythonShell": {
+                "path": "%env_path%/python.exe",
+                "args": [],
+                "icon": "terminal-bash",
+                "color": "terminal.ansiCyan",
+                "env": {"PYTHONPATH": "%PYTHONPATH%"}
+            },
+        },
+        "editor.fontLigatures": false,
+    },
+    "launch": {
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "name": "Python: Current File",
+                "type": "python",
+                "request": "launch",
+                "program": "${file}",
+                "console": "integratedTerminal",
+                "justMyCode": true,
+                "cwd": "${workspaceFolder}",
+                "env": {"PYTHONPATH": "%PYTHONPATH%"}
+            }
+        ]
+    },
+}
