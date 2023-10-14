@@ -1,6 +1,6 @@
 '''Environment Management Tools.'''
 # %%  Imports
-from typing import Union, List, Tuple
+from typing import Union, List, Tuple, Dict
 import re
 import json
 import subprocess
@@ -286,37 +286,6 @@ def build_env_table(env_storage_path: Path = None)->pd.DataFrame:
     return env_data
 
 
-def remove_environment(env_ref: EnvRef)->str:
-    '''Remove an Anaconda environment
-
-    Args:
-        env_ref (EnvRef): A reference to the Conda environment either by it's
-            name or by the path to the environment.
-
-    Returns:
-        str: Log output generated when removing the environment.
-    '''
-    # Allow for string path references
-    env_path = Path(env_ref)
-    if env_path.is_dir():
-        # env_ref is a path reference.
-        # Note: this can fail if env_name matches a folder name in Path.cwd().
-        env_cmd_ref = ['-p', env_path]
-    else:
-        # env_ref is an environment name
-        del_env = env_ref
-        env_cmd_ref = ['--name', del_env]
-
-    console_command('conda deactivate', AnacondaException,
-                    'Error deactivating environment.')
-
-    delete_cmd = ['conda', 'remove', '-y', '--all']
-    delete_cmd += env_cmd_ref
-    uninstall_log = console_command(delete_cmd, AnacondaException,
-                                    f'Unable to delete environment {del_env}')
-    return uninstall_log
-
-
 def activate_environment(env_name: str)->str:
     '''Generate command string to activate a Conda environment.
 
@@ -341,3 +310,62 @@ def activate_environment(env_name: str)->str:
         r'&&'
         ])
     return cmd_str
+
+
+def create_environment(new_env: str, python_version: str = 3.10)->Dict[str,str]:
+    '''Create a ne Conda environment.
+
+    Args:
+        new_env (str): The name for the new Conda environment.
+        python_version (str, optional): The version of python to used for the
+            environment. Defaults to 3.10.
+
+    Returns:
+        Dict[str,str]: Output as a dictionary of dictionaries from the
+            environment creation logs.
+    '''
+    logger.info('Creating environment for %s', new_env)
+
+    env_create_cmds = f'conda create -y --json --quiet --name {new_env} '
+    env_create_cmds += f'python={python_version}'
+    err_msg = ' '.join([f'Unable to create new environment "{new_env}"',
+                        f'with python={python_version}!'])
+    install_output = console_command(env_create_cmds, AnacondaException,
+                                     err_msg)
+    install_output_dict = json.loads(install_output)
+    return install_output_dict
+
+
+def remove_environment(env_ref: EnvRef)->Dict[str,str]:
+    '''Remove an Anaconda environment
+
+    Args:
+        env_ref (EnvRef): A reference to the Conda environment either by it's
+            name or by the path to the environment.
+
+    Returns:
+        Dict[str,str]: Log output, as a dictionary of dictionaries, generated
+            when removing the environment.
+    '''
+    # Allow for string path references
+    env_path = Path(env_ref)
+    if env_path.is_dir():
+        # env_ref is a path reference.
+        # Note: this can fail if env_name matches a folder name in Path.cwd().
+        del_env = env_path.name
+        env_cmd_ref = f'-p {str(env_path)}'
+    else:
+        # env_ref is an environment name
+        del_env = env_ref
+        env_cmd_ref = f'--name {del_env}'
+
+    delete_cmd = activate_environment(del_env)
+    delete_cmd += 'conda deactivate&&'
+    delete_cmd += 'conda remove -y --json --quiet --all '
+    delete_cmd += env_cmd_ref
+    err_msg = f'Unable to delete environment {del_env}'
+
+    uninstall_output = console_command(delete_cmd, AnacondaException, err_msg)
+
+    install_output_dict = json.loads(uninstall_output)
+    return install_output_dict
