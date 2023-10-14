@@ -82,7 +82,7 @@ C:\ProgramData\Anaconda3\python.exe C:\ProgramData\Anaconda3\cwp.py C:\Users\Gre
 "W:\Plan Checking\Plan Check Tools"
 %ALLUSERSPROFILE%\Anaconda3\Menu\jupyter.ico
 %ALLUSERSPROFILE%\Anaconda3\envs\Standard\Scripts\spyder.ico
-
+C:\Program Files\Microsoft VS Code\Code.exe
 
 ########## quickstart Launch ############
 xlwings quickstart myproject.
