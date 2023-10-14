@@ -2,4 +2,6 @@
 envs/
 /envs *
 .ipynb_checkpoints
-Standard Environment
+Environment Info Files
+.pyc
+__pycache__/
