@@ -78,7 +78,9 @@ def error_check(output: subprocess.CompletedProcess, error_type: Exception,
         raise error_type(msg) from err
 
 
-def console_command(cmd_str: CmdType, error_type: Exception, error_msg: str)->str:
+def console_command(cmd_str: CmdType,
+                    error_type: Exception = subprocess.CalledProcessError,
+                    error_msg: str = 'A console_command error occurred!')->str:
     '''Run a system console command.
 
     Run the command. Check for errors and raise the appropriate error if
@@ -94,9 +96,10 @@ def console_command(cmd_str: CmdType, error_type: Exception, error_msg: str)->st
         cmd_str (CmdType): The operating system command to execute. Either a
             single string containing the entire command, or a list of strings,
             with each part of the command as a separate list item
-        error_type (Exception): The type of exception to raise if an error
-            occurs.
-        error_msg (str): The Error message to include if required.
+        error_type (Exception, Optional): The type of exception to raise if an
+            error occurs.  Default is subprocess.CalledProcessError
+        error_msg (str, Optional): The Error message to include if required.
+            Default is 'A console_command error occurred!'
 
     Returns:
         str: The log output from running the console command.
@@ -281,3 +284,34 @@ def build_env_table(env_storage_path: Path = None)->pd.DataFrame:
             env_table_file = env_storage_path / 'Conda Environments.xlsx'
         env_data.to_excel(env_table_file)
     return env_data
+
+
+def remove_environment(env_ref: EnvRef)->str:
+    '''Remove an Anaconda environment
+
+    Args:
+        env_ref (EnvRef): A reference to the Conda environment either by it's
+            name or by the path to the environment.
+
+    Returns:
+        str: Log output generated when removing the environment.
+    '''
+    # Allow for string path references
+    env_path = Path(env_ref)
+    if env_path.is_dir():
+        # env_ref is a path reference.
+        # Note: this can fail if env_name matches a folder name in Path.cwd().
+        env_cmd_ref = ['-p', env_path]
+    else:
+        # env_ref is an environment name
+        del_env = env_ref
+        env_cmd_ref = ['--name', del_env]
+
+    console_command('conda deactivate', AnacondaException,
+                    'Error deactivating environment.')
+
+    delete_cmd = ['conda', 'remove', '-y', '--all']
+    delete_cmd += env_cmd_ref
+    uninstall_log = console_command(delete_cmd, AnacondaException,
+                                    f'Unable to delete environment {del_env}')
+    return uninstall_log
