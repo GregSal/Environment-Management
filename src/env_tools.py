@@ -39,10 +39,11 @@ FileNameOption = Union[str, bool]
 class ProjectException(Exception):
     '''Base Exception for projects module.'''
 
-
-
 class AnacondaException(ProjectException):
     '''Errors related to `conda` calls.'''
+
+class AbortedCmdException(ProjectException):
+    '''Errors resulting from a time-out for a system call.'''
 
 
 # %% Utility Functions
@@ -76,40 +77,39 @@ def error_check(output: subprocess.CompletedProcess, error_type: Exception,
     except subprocess.CalledProcessError as err:
         msg = '\n'.join([error_msg, output.stderr.decode()])
         raise error_type(msg) from err
+    except subprocess.TimeoutExpired as err:
+        msg = '\n'.join(['Command timed out!', output.stderr.decode()])
+        raise AbortedCmdException(msg) from err
 
 
 def console_command(cmd_str: CmdType,
                     error_type: Exception = subprocess.CalledProcessError,
-                    error_msg: str = 'A console_command error occurred!')->str:
+                    error_msg: str = 'A console_command error occurred!',
+                    abort_after: int = None)->str:
     '''Run a system console command.
 
     Run the command. Check for errors and raise the appropriate error if
     necessary.
     If no error, return the output from the result of running the console
     command.
-    if cmd_str is a single string, it is split at each space.  If a given part
-    of a command contains spaces (for example as a file name), passing the
-    entire command as a single string will produce an error.  In this case pass
-    the command a list of strings.
 
     Args:
         cmd_str (CmdType): The operating system command to execute. Either a
             single string containing the entire command, or a list of strings,
-            with each part of the command as a separate list item
+            with each part of the command as a separate list item.
         error_type (Exception, Optional): The type of exception to raise if an
-            error occurs.  Default is subprocess.CalledProcessError
+            error occurs.  Default is subprocess.CalledProcessError.
         error_msg (str, Optional): The Error message to include if required.
-            Default is 'A console_command error occurred!'
+            Default is 'A console_command error occurred!'.
+        abort_after (int, Optional): Abort the command call after the given
+            number of seconds.  If None, do not time-out the command call.
+            Default is None.
 
     Returns:
         str: The log output from running the console command.
     '''
-    if true_iterable(cmd_str):
-        cmd_list = list(cmd_str)
-    else:
-        cmd_list = cmd_str.split(' ')
-    output = subprocess.run(cmd_list, shell=True, capture_output=True,
-                            check=False)
+    output = subprocess.run(cmd_str, shell=True, capture_output=True,
+                            check=False, timeout=abort_after)
     # check for errors
     error_check(output, error_type, error_msg)
     cmd_log = output.stdout.decode()
@@ -315,3 +315,29 @@ def remove_environment(env_ref: EnvRef)->str:
     uninstall_log = console_command(delete_cmd, AnacondaException,
                                     f'Unable to delete environment {del_env}')
     return uninstall_log
+
+
+def activate_environment(env_name: str)->str:
+    '''Generate command string to activate a Conda environment.
+
+    This string is intended to be a prefix to activate a conda environment.
+    for use with calls to `console_command`.
+    e.g.:
+        cmd_str = activate_environment('Standard')
+        cmd_str += 'conda env export --from-history'
+        output = console_command(cmd_str)
+
+    Args:
+        env_name (str): The name of the Conda environment.
+
+    Returns:
+        str: The Conda activation string prefix.
+    '''
+    cmd_str = ''.join([
+        r'cmd /c C:\ProgramData\Anaconda3\Scripts\activate.bat ',
+        r'C:\ProgramData\Anaconda3',
+        r'&&',
+        f'conda activate {env_name}',
+        r'&&'
+        ])
+    return cmd_str
