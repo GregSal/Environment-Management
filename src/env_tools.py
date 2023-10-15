@@ -1,4 +1,8 @@
-'''Environment Management Tools.'''
+'''Environment Management Tools.
+
+ Tools for building and managing Conda project environments
+ '''
+
 # %%  Imports
 from typing import Union, List, Tuple, Dict
 import re
