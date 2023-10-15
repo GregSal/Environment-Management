@@ -304,26 +304,39 @@ def save_env_specs(env_ref: EnvRef, save_folder: Path,
                         f'Error saving {env_name}.json file.')
 
 
-def get_conda_info(info_storage_path: Path = None)->dict:
+def get_conda_info(env_ref: EnvRef = None, info_storage_path: Path = None)->dict:
     '''Get information about the current Conda environment.
 
     If a file path is provided, save the json info to that file.
 
     Args:
-        conda_info_file (Path, optional): The file path to save the json data
-            in. If None, do not save the data.  Defaults to None.
+        env_ref (EnvRef): A reference to the Conda environment either by it's
+            name or by the path to the environment. If None, get info for the
+            base environment.  Defaults to None.
+        info_storage_path (str): Path to the folder or file where the
+            information is to be saved. If info_storage_path is a folder, the
+            json info will be saved in a file named:
+            'conda_info_<env_name>.json'.  If None, do not save the data.
+            Defaults to None.
 
     Returns:
         dict: Conda environment parameters as nested dictionaries.
     '''
-    conda_info_cmd = r'conda info --envs --json'
-    conda_info = console_command(conda_info_cmd, AnacondaException,
-                                 'Unable to get Anaconda info')
+    if env_ref:
+        env_name  = set_env_ref(env_ref)[0]
+        conda_info_cmd = activate_environment(env_name)
+    else:
+        conda_info_cmd = ''
+        env_name = 'base'
+
+    conda_info_cmd += r'conda info --envs --json'
+    msg = f'Unable to get Anaconda info for ({env_name})'
+    conda_info = console_command(conda_info_cmd, AnacondaException, msg)
 
     # If supplied, save the data to a .json file
     if info_storage_path:
         if info_storage_path.is_dir():
-            conda_info_file = info_storage_path / 'conda_info.json'
+            conda_info_file = info_storage_path / f'conda_info_{env_name}.json'
         else:
             conda_info_file = Path(info_storage_path)
         conda_info_file.write_text(conda_info, encoding="utf-8")
@@ -419,15 +432,45 @@ def install_packages(env_ref: EnvRef, package_list: List[str])->Dict[str,str]:
 
     packages = ' '.join(package_list)
 
-    install_cmd = activate_environment(env_name)
-    install_cmd += 'conda install -y --json  --quiet '
+    install_cmd = 'conda install -y --json  --quiet '
     install_cmd += env_cmd_ref
     install_cmd += ' '
     install_cmd += packages
 
     err_msg = f'Unable to install requested packages in "{env_name}"!'
 
-    uninstall_output = console_command(install_cmd, AnacondaException, err_msg)
+    install_output = console_command(install_cmd, AnacondaException, err_msg)
 
-    install_output_dict = json.loads(uninstall_output)
+    install_output_dict = json.loads(install_output)
     return install_output_dict
+
+
+def pip_install_packages(env_ref: EnvRef, pip_package_list: List[str])->Dict[str,str]:
+    '''Use pip to install packages in an Anaconda environment
+
+    This is intended to be used for installing packages that that cannot be
+    found in one of the Anaconda channels.
+
+    Args:
+        env_ref (EnvRef): A reference to the Conda environment either by it's
+            name or by the path to the environment.
+        package_list (List[str]): A list of pip "requirement specifiers"
+            (typically package names) to install in the Conda environment.  See
+            [Requirement Specifiers](https://pip.pypa.io/en/stable/reference/requirement-specifiers/)
+            for more details.
+    Returns:
+        Dict[str,str]: Log output, as a dictionary of dictionaries, generated
+            when installing the packages.
+    '''
+    env_name = set_env_ref(env_ref)[1]
+    activate_cmd = activate_environment(new_env)
+
+    install_logs = []
+    for pkg_req in pip_package_list:
+        install_cmd = activate_cmd + f'pip install {pkg_req} --quiet --report -'
+        err_msg = f'Unable to install {pkg_req} in "{env_name}"!'
+        pip_output = console_command(install_cmd, AnacondaException, err_msg)
+        install_log_dict = json.loads(pip_output)
+        install_logs.append(install_log_dict)
+
+    return install_logs
