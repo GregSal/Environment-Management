@@ -45,6 +45,9 @@ class AnacondaException(ProjectException):
 class AbortedCmdException(ProjectException):
     '''Errors resulting from a time-out for a system call.'''
 
+class MissingEnvironment(ProjectException):
+    '''The supplied environment name or path is not an Anaconda environment.'''
+
 
 # %% Utility Functions
 def true_iterable(variable)-> bool:
@@ -116,6 +119,124 @@ def console_command(cmd_str: CmdType,
     return cmd_log
 
 # %% Conda Environment Functions
+def list_environments()->List[FullEnvRef]:
+    '''Get list of current Anaconda environments.
+
+    Returns:
+        List[FullEnvRef]: A list containing the references to all current
+            Anaconda environments
+    '''
+    env_pattern = re.compile(
+        r'(?P<name>'  # Start of *name* group.
+        r'[a-z0-9_]'  # Name begins with letter, number or _.
+        r'.+?'        # All text until 2 or more spaces are encountered
+        r')'          # End of *name* group.
+        r'[ *]{2,}'   # 2 or more spaces or * in a row.
+        r'(?P<path>'  # Start of *path* group.
+        r'[A-Z]:'     # Drive letter, followed by a :.
+        r'[^\r\n]*'   # Remaining text before the end of the line.
+        r')',         # End of *path* group.
+        flags=re.IGNORECASE)
+
+    conda_envs = r'conda env list'
+    env_list = console_command(conda_envs, AnacondaException,
+                               'Unable to get Anaconda environments')
+    env_info = [(name, Path(path))
+                for name, path in env_pattern.findall(env_list)]
+    return env_info
+
+
+def build_env_table(env_storage_path: Path = None)->pd.DataFrame:
+    '''Save a spreadsheet table with environments and their paths.
+
+    Args:
+        env_storage_path (Path, optional): The path where the table spreadsheet
+            will be stored. If a directory, the default file name:
+                'Conda Environments.xlsx'
+            is used. If None, do not save the table in a file. Defaults to None.
+
+    Returns:
+        pd.DataFrame: A table with environments and their paths.
+    '''
+    env_list = list_environments()
+    env_data = pd.DataFrame(env_list)
+    env_data.columns = ['Environment', 'Environment Path']
+    if env_storage_path:
+        if env_storage_path.is_dir():
+            env_table_file = env_storage_path / 'Conda Environments.xlsx'
+        env_data.to_excel(env_table_file)
+    return env_data
+
+
+def activate_environment(env_name: str)->str:
+    '''Generate command string to activate a Conda environment.
+
+    This string is intended to be a prefix to activate a conda environment.
+    for use with calls to `console_command`.
+    e.g.:
+        cmd_str = activate_environment('Standard')
+        cmd_str += 'conda env export --from-history'
+        output = console_command(cmd_str)
+
+    Args:
+        env_name (str): The name of the Conda environment.
+
+    Returns:
+        str: The Conda activation string prefix.
+    '''
+    cmd_str = ''.join([
+        r'cmd /c C:\ProgramData\Anaconda3\Scripts\activate.bat ',
+        r'C:\ProgramData\Anaconda3',
+        r'&&',
+        f'conda activate {env_name}',
+        r'&&'
+        ])
+    return cmd_str
+
+
+def set_env_ref(env_ref: EnvRef)->str:
+    '''Create a string environment reference for use in Conda commands.
+
+    The environment command segment has one of two forms:
+        - If env_ref is the name of an environment:
+            - *'--name <Environment Name>'*.
+        - If env_ref is the path to an environment:
+            - *'-p <Path To Environment>'*.
+
+    Args:
+        env_ref (EnvRef): A reference to the Conda environment either by it's
+            name or by the path to the environment.
+
+    Raises:
+        MissingEnvironment: env_ref does not correspond with a current Anaconda
+            environment.
+
+    Returns:
+        Tuple[str, str]: A length-two tuple. The first value is the environment
+            name. The second is a Conda command segment referencing the
+            desired environment.
+    '''
+    # Build list of current environment names and paths
+    env_list = list_environments()
+    env_names = {env[0] for env in env_list}
+    env_paths = {str(env[1]) for env in env_list}
+
+    # Check for environment name
+    if env_ref in env_names:
+        # env_ref is an environment name
+        env_name = env_ref
+        env_cmd_ref = f'--name {env_ref}'
+    # Check for environment path
+    elif str(env_ref) in env_paths:
+        # env_ref is a path reference.
+        # The environment name is the name of the env folder.
+        env_name = Path(env_ref).name
+        env_cmd_ref = f'-p {str(env_ref)}'
+    else:
+        raise MissingEnvironment(f'Environment {env_ref} does not exist')
+    return (env_name, env_cmd_ref)
+
+
 def save_env_specs(env_ref: EnvRef, save_folder: Path,
                    spec_file: FileNameOption = True,
                    yml_file: FileNameOption = True,
@@ -142,17 +263,7 @@ def save_env_specs(env_ref: EnvRef, save_folder: Path,
             environment.  If True, use the default file name pattern.
             Default is True.
     '''
-    # Allow for string path references
-    env_path = Path(env_ref)
-    if env_path.is_dir():
-        # env_ref is a path reference.
-        # Note: this can fail if env_name matches a folder name in Path.cwd().
-        env_name = env_path.name
-        env_cmd_ref = ['-p', env_path]
-    else:
-        # env_ref is an environment name
-        env_name = env_ref
-        env_cmd_ref = ['--name', env_name]
+    env_name, env_cmd_ref = set_env_ref(env_ref)
 
     if spec_file:
         # Generate a conda environment spec file
@@ -218,33 +329,6 @@ def get_conda_info(info_storage_path: Path = None)->dict:
     return conda_info_dict
 
 
-def list_environments()->List[FullEnvRef]:
-    '''Get list of current Anaconda environments.
-
-    Returns:
-        List[FullEnvRef]: A list containing the references to all current
-            Anaconda environments
-    '''
-    env_pattern = re.compile(
-        r'(?P<name>'  # Start of *name* group.
-        r'[a-z0-9_]'  # Name begins with letter, number or _.
-        r'.+?'        # All text until 2 or more spaces are encountered
-        r')'          # End of *name* group.
-        r'[ *]{2,}'   # 2 or more spaces or * in a row.
-        r'(?P<path>'  # Start of *path* group.
-        r'[A-Z]:'     # Drive letter, followed by a :.
-        r'[^\r\n]*'   # Remaining text before the end of the line.
-        r')',         # End of *path* group.
-        flags=re.IGNORECASE)
-
-    conda_envs = r'conda env list'
-    env_list = console_command(conda_envs, AnacondaException,
-                               'Unable to get Anaconda environments')
-    env_info = [(name, Path(path))
-                for name, path in env_pattern.findall(env_list)]
-    return env_info
-
-
 def log_all_envs(env_storage_path: Path):
     '''Store environment info for each environment.
 
@@ -262,54 +346,6 @@ def log_all_envs(env_storage_path: Path):
             save_env_specs(env_path, env_storage_path)
         except AnacondaException:
             logger.warning('Unable to store environment for %s', env_name)
-
-
-def build_env_table(env_storage_path: Path = None)->pd.DataFrame:
-    '''Save a spreadsheet table with environments and their paths.
-
-    Args:
-        env_storage_path (Path, optional): The path where the table spreadsheet
-            will be stored. If a directory, the default file name:
-                'Conda Environments.xlsx'
-            is used. If None, do not save the table in a file. Defaults to None.
-
-    Returns:
-        pd.DataFrame: A table with environments and their paths.
-    '''
-    env_list = list_environments()
-    env_data = pd.DataFrame(env_list)
-    env_data.columns = ['Environment', 'Environment Path']
-    if env_storage_path:
-        if env_storage_path.is_dir():
-            env_table_file = env_storage_path / 'Conda Environments.xlsx'
-        env_data.to_excel(env_table_file)
-    return env_data
-
-
-def activate_environment(env_name: str)->str:
-    '''Generate command string to activate a Conda environment.
-
-    This string is intended to be a prefix to activate a conda environment.
-    for use with calls to `console_command`.
-    e.g.:
-        cmd_str = activate_environment('Standard')
-        cmd_str += 'conda env export --from-history'
-        output = console_command(cmd_str)
-
-    Args:
-        env_name (str): The name of the Conda environment.
-
-    Returns:
-        str: The Conda activation string prefix.
-    '''
-    cmd_str = ''.join([
-        r'cmd /c C:\ProgramData\Anaconda3\Scripts\activate.bat ',
-        r'C:\ProgramData\Anaconda3',
-        r'&&',
-        f'conda activate {env_name}',
-        r'&&'
-        ])
-    return cmd_str
 
 
 def create_environment(new_env: str, python_version: str = 3.10)->Dict[str,str]:
@@ -347,25 +383,47 @@ def remove_environment(env_ref: EnvRef)->Dict[str,str]:
         Dict[str,str]: Log output, as a dictionary of dictionaries, generated
             when removing the environment.
     '''
-    # Allow for string path references
-    env_path = Path(env_ref)
-    if env_path.is_dir():
-        # env_ref is a path reference.
-        # Note: this can fail if env_name matches a folder name in Path.cwd().
-        del_env = env_path.name
-        env_cmd_ref = f'-p {str(env_path)}'
-    else:
-        # env_ref is an environment name
-        del_env = env_ref
-        env_cmd_ref = f'--name {del_env}'
+    env_name, env_cmd_ref = set_env_ref(env_ref)
 
-    delete_cmd = activate_environment(del_env)
+    delete_cmd = activate_environment(env_name)
     delete_cmd += 'conda deactivate&&'
     delete_cmd += 'conda remove -y --json --quiet --all '
     delete_cmd += env_cmd_ref
-    err_msg = f'Unable to delete environment {del_env}'
+    err_msg = f'Unable to delete environment {env_name}'
 
     uninstall_output = console_command(delete_cmd, AnacondaException, err_msg)
+
+    install_output_dict = json.loads(uninstall_output)
+    return install_output_dict
+
+
+def install_packages(env_ref: EnvRef, package_list: List[str])->Dict[str,str]:
+    '''Install Conda packages in an Anaconda environment.
+
+    Args:
+        env_ref (EnvRef): A reference to the Conda environment either by it's
+            name or by the path to the environment.
+        package_list (List[str]): A list of package names (and optionally
+            version restrictions) to install in the Conda environment.  The
+            packages must be available from one of the standard Anaconda
+            channels.
+    Returns:
+        Dict[str,str]: Log output, as a dictionary of dictionaries, generated
+            when installing the packages.
+    '''
+    env_name, env_cmd_ref = set_env_ref(env_ref)
+
+    packages = ' '.join(package_list)
+
+    install_cmd = activate_environment(env_name)
+    install_cmd += 'conda install -y --json  --quiet '
+    install_cmd += env_cmd_ref
+    install_cmd += ' '
+    install_cmd += packages
+
+    err_msg = f'Unable to install requested packages in "{env_name}"!'
+
+    uninstall_output = console_command(install_cmd, AnacondaException, err_msg)
 
     install_output_dict = json.loads(uninstall_output)
     return install_output_dict
