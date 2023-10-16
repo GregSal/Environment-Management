@@ -339,7 +339,7 @@ def get_conda_info(env_ref: EnvRef = None, info_storage_path: Path = None)->dict
             conda_info_file = info_storage_path / f'conda_info_{env_name}.json'
         else:
             conda_info_file = Path(info_storage_path)
-        conda_info_file.write_text(conda_info, encoding="utf-8")
+        conda_info_file.write_text(conda_info, encoding='utf-8')
 
     # Convert the json data to a dictionary
     conda_info_dict = json.loads(conda_info)
@@ -462,8 +462,8 @@ def pip_install_packages(env_ref: EnvRef, pip_package_list: List[str])->Dict[str
         Dict[str,str]: Log output, as a dictionary of dictionaries, generated
             when installing the packages.
     '''
-    env_name = set_env_ref(env_ref)[1]
-    activate_cmd = activate_environment(new_env)
+    env_name = set_env_ref(env_ref)[0]
+    activate_cmd = activate_environment(env_name)
 
     install_logs = []
     for pkg_req in pip_package_list:
