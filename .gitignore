@@ -1,5 +1,5 @@
-/envs
 envs/
-/envs *
 .ipynb_checkpoints
-Standard Environment
+environment
+conda commands/
+*.lnk
