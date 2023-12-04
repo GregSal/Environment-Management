@@ -1,4 +1,6 @@
+/envs
 envs/
+/envs *
 .ipynb_checkpoints
 environment
 conda commands/

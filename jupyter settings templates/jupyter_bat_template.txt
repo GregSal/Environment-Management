@@ -1,0 +1,5 @@
+CALL C:\ProgramData\Anaconda3\Scripts\activate.bat C:\ProgramData\Anaconda3
+CALL conda activate "{new_env}"
+CD "{project_folder}"
+{project_drive}
+jupyter-lab
