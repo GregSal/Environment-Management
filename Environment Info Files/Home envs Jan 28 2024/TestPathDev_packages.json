@@ -1,0 +1,18 @@
+{
+  "channels": [
+    "conda-forge",
+    "bioconda",
+    "defaults"
+  ],
+  "dependencies": [
+    "python=3.9",
+    "parsedatetime",
+    "nb_conda_kernels",
+    "spyder",
+    "pylint",
+    "jupyterlab",
+    "numpy"
+  ],
+  "name": "TestPathDev",
+  "prefix": "C:\\Users\\smoke\\.conda\\envs\\TestPathDev"
+}

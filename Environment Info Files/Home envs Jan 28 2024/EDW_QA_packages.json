@@ -1,0 +1,27 @@
+{
+  "channels": [
+    "conda-forge",
+    "bioconda",
+    "defaults"
+  ],
+  "dependencies": [
+    "numpy",
+    "matplotlib",
+    "pysimplegui",
+    "pyinstaller",
+    "black",
+    "pylint",
+    "pandas",
+    "spyder",
+    "mypy",
+    "python=3.9",
+    "scipy",
+    "jupyterlab",
+    "xlwings",
+    "openpyxl",
+    "nb_conda_kernels",
+    "pydicom"
+  ],
+  "name": "EDW_QA",
+  "prefix": "C:\\Users\\smoke\\.conda\\envs\\EDW_QA"
+}

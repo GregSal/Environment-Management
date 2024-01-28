@@ -5,3 +5,4 @@ envs/
 environment
 conda commands/
 *.lnk
+*__pycache__*

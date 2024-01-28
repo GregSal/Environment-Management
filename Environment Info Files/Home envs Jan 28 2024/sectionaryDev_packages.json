@@ -1,0 +1,31 @@
+{
+  "channels": [
+    "conda-forge",
+    "bioconda",
+    "defaults"
+  ],
+  "dependencies": [
+    "python=3.8",
+    "openpyxl",
+    "xlwings",
+    "nb_conda_kernels",
+    "pandas",
+    "spyder",
+    "jupyterlab",
+    "nbsphinx",
+    "sphinx",
+    "nbsphinx-link",
+    "esbonio",
+    "myst-parser",
+    "mypy",
+    "pylint",
+    "black",
+    "pandoc",
+    "sphinx-copybutton",
+    "sphinx_rtd_theme",
+    "matplotlib",
+    "ipywidgets"
+  ],
+  "name": "sectionaryDev",
+  "prefix": "C:\\Users\\smoke\\.conda\\envs\\sectionaryDev"
+}

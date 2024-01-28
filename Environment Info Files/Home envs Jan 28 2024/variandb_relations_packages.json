@@ -1,0 +1,25 @@
+{
+  "channels": [
+    "conda-forge",
+    "bioconda",
+    "defaults"
+  ],
+  "dependencies": [
+    "matplotlib",
+    "python=3.9",
+    "networkx",
+    "spyder",
+    "pyinstaller",
+    "black",
+    "xlwings",
+    "mypy",
+    "pysimplegui",
+    "pylint",
+    "pyodbc",
+    "pandas",
+    "pygraphviz",
+    "jupyterlab"
+  ],
+  "name": "variandb_relations",
+  "prefix": "C:\\Users\\smoke\\.conda\\envs\\variandb_relations"
+}

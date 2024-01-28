@@ -31,6 +31,10 @@ CmdType = Union[str, List[str]]
 # path to the environment.
 EnvRef = Union[str, Path]
 
+# FileOption is a reference to a file as a string or path If True, this means
+# that a default name is to be used.
+FileOption = Union[str, Path, bool]
+
 # FullEnvRef is # FullEnvRef is a complete reference to a Conda environment
 # as a Tuple containing the name and the path to the environment.
 FullEnvRef = Tuple[str, Path]
@@ -62,6 +66,51 @@ def true_iterable(variable)-> bool:
         True if variable is a non-string iterable.
     '''
     return not isinstance(variable, str) and isinstance(variable, Iterable)
+
+
+def build_file_string(file_name: FileOption, folder: Path = None,
+                      default_name: str = 'file.txt')->str:
+    '''Generates a quoted full file path for use with subprocess commands.
+
+    If file_name is a Path, convert it to a quoted string.
+    If file_name is a string and folder is supplied, build a full path as:
+        `folder / file_name` and convert it to a quoted string.
+    If file_name is a string and folder is NOT supplied, just add quotes to
+        file_name.
+    If file_name is True, use default_name as the file_name and either build a
+        full path or just add quotes depending of whether folder was supplied.
+    If file_name is False or an empty string, return an empty string.
+
+    Double quotes (") are used to quote the string.
+
+    Args:
+        file_name (FileOption): Either the full path to a file, the name of a
+            file, or a boolean.
+        folder (Path): The folder that is used with file_name to create a full
+            path.
+        default_name (str): A default file name to use if file_name == True.
+
+    Returns:
+        str: A quoted full path to a file, or an empty string if file_name is
+            False.
+    '''
+    # Return empty string is file_name is False
+    if not file_name:
+        return ''
+
+    if isinstance(file_name, Path):
+        final_name = str(file_name)
+    elif isinstance(file_name, str):
+        if folder:
+            file_path = folder / file_name
+            final_name = str(file_path)
+        else:
+            final_name = file_name
+    elif folder:
+        file_path = folder / default_name
+        final_name = str(file_path)
+    return f'"{final_name}"'
+
 
 
 # %% Console command processing
@@ -267,39 +316,33 @@ def save_env_specs(env_ref: EnvRef, save_folder: Path,
             environment.  If True, use the default file name pattern.
             Default is True.
     '''
-    env_name, env_cmd_ref = set_env_ref(env_ref)
 
-    if spec_file:
+    env_name, env_cmd_ref = set_env_ref(env_ref)
+    default_name = f'{env_name}_spec.txt'
+    full_spec_file = build_file_string(spec_file, save_folder, default_name)
+    if full_spec_file:
         # Generate a conda environment spec file
-        if not isinstance(spec_file, str):
-            # Use the default file pattern
-            spec_file = save_folder / f'{env_name}_spec.txt'
-        save_spec_cmd = ['conda', 'list', '--explicit']
-        save_spec_cmd += env_cmd_ref
-        save_spec_cmd += ['>', str(spec_file)]
+        save_spec_cmd  = f'conda list --explicit {env_cmd_ref} '
+        save_spec_cmd += f'> {full_spec_file}'
         console_command(save_spec_cmd, AnacondaException,
                         f'Error saving {env_name} environment spec file.')
 
-    if yml_file:
+    default_name = f'{env_name}.yml'
+    full_yml_file = build_file_string(yml_file, save_folder, default_name)
+    if full_yml_file:
         # Generate a conda environment .yml file
-        if not isinstance(yml_file, str):
-            # Use the default file pattern
-            yml_file = save_folder / f'{env_name}.yml'
-        save_yml_cmd = ['conda', 'env', 'export']
-        save_yml_cmd += env_cmd_ref
-        save_yml_cmd += ['--file', str(yml_file)]
+        save_yml_cmd  = f'conda env export {env_cmd_ref} '
+        save_yml_cmd += f'--file {full_yml_file}'
         console_command(save_yml_cmd, AnacondaException,
                         f'Error saving {env_name}.yml file.')
 
+    default_name = f'{env_name}.json'
+    full_history_json_file = build_file_string(history_json, save_folder,
+                                               default_name)
     if history_json:
         # Generate a conda environment history .json file
-        if not isinstance(history_json, str):
-            # Use the default file pattern
-            history_json = save_folder / f'{env_name}.json'
-        save_history_cmd = ['conda', 'env', 'export',
-                            '--from-history', '--json']
-        save_history_cmd += env_cmd_ref
-        save_history_cmd += ['>', str(history_json)]
+        save_history_cmd  = r'conda env export --from-history --json '
+        save_history_cmd += f'{env_cmd_ref} > {full_history_json_file}'
         console_command(save_history_cmd, AnacondaException,
                         f'Error saving {env_name}.json file.')
 

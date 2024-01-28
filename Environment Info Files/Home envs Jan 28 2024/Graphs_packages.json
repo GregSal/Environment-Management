@@ -1,0 +1,19 @@
+{
+  "channels": [
+    "conda-forge",
+    "bioconda",
+    "defaults"
+  ],
+  "dependencies": [
+    "python=3.10",
+    "matplotlib",
+    "pandas",
+    "networkx",
+    "numpy",
+    "nb_conda_kernels",
+    "jupyterlab",
+    "pylint"
+  ],
+  "name": "Graphs",
+  "prefix": "C:\\ProgramData\\Anaconda3\\envs\\Graphs"
+}
