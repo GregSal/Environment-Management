@@ -1,0 +1,25 @@
+{
+  "channels": [
+    "conda-forge",
+    "bioconda",
+    "defaults"
+  ],
+  "dependencies": [
+    "python=3.8.12",
+    "pandas",
+    "zipfile2",
+    "docx2txt",
+    "xlwings",
+    "pywin32",
+    "openpyxl",
+    "pysimplegui",
+    "matplotlib",
+    "jupyterlab",
+    "nb_conda_kernels",
+    "spyder",
+    "pylint",
+    "mypy"
+  ],
+  "name": "FormExtraction",
+  "prefix": "C:\\Users\\smoke\\.conda\\envs\\FormExtraction"
+}

@@ -1,0 +1,30 @@
+{
+  "channels": [
+    "conda-forge",
+    "bioconda",
+    "defaults"
+  ],
+  "dependencies": [
+    "python=3.10",
+    "statsmodels",
+    "seaborn==0.10.1",
+    "neptune-client",
+    "nibabel",
+    "scikit-learn",
+    "scipy",
+    "pylint",
+    "xgboost",
+    "jupyterlab",
+    "openpyxl",
+    "neptune-sklearn",
+    "nb_conda_kernels",
+    "pandas",
+    "scikit-image",
+    "torchvision",
+    "matplotlib",
+    "xlwings",
+    "numpy"
+  ],
+  "name": "McMedHack",
+  "prefix": "C:\\Users\\smoke\\.conda\\envs\\McMedHack"
+}

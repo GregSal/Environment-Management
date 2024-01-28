@@ -1,0 +1,76 @@
+CALL C:\ProgramData\Anaconda3\Scripts\activate.bat
+
+
+########## Creation command ############
+conda create --name Standard python=3.11
+conda activate Standard
+conda install -y numpy pandas matplotlib openpyxl xlwings pywin32 pysimplegui networkx pygraphviz shapely scipy
+#### Standard Tools ####
+conda install -y spyder jupyterlab ipykernel nb_conda_kernels pylint mypy black
+
+
+########## Store Environment ############
+conda list --explicit > Standard_specfile.txt
+conda env export > Standard_FULL.yml
+conda env export --from-history > Standard.yml
+
+
+########## xlwings Configure commands ############
+xlwings license update -k noncommercial
+xlwings addin install
+xlwings config create --force
+
+
+########## Install command ############
+conda create --name Standard --file "Standard_specfile.txt"
+
+conda env create --name Standard --file="Standard.yml"
+
+
+########### Related Commands  ##########
+conda config --append channels conda-forge
+
+conda activate Standard
+
+
+#### Removing Environment ####
+conda activate Standard
+xlwings addin uninstall
+conda deactivate
+conda remove --name Standard --all
+
+#### Primary Packages ####
+python >= 3.11
+numpy 
+pandas 
+matplotlib 
+openpyxl 
+xlwings 
+pywin32 
+pysimplegui 
+networkx 
+pygraphviz 
+shapely 
+scipy
+
+#### Tool Packages ####
+spyder
+jupyterlab 
+ipykernel 
+nb_conda_kernels 
+pylint 
+mypy 
+black
+
+
+########## Spyder Launch ############
+C:\ProgramData\Anaconda3\pythonw.exe C:\ProgramData\Anaconda3\cwp.py C:\ProgramData\Anaconda3\envs\Standard C:\ProgramData\Anaconda3\envs\Standard\pythonw.exe C:\ProgramData\Anaconda3\envs\Standard\Scripts\spyder-script.py
+
+########## Jupyter Lab Launch ############
+C:\ProgramData\Anaconda3\python.exe C:\ProgramData\Anaconda3\cwp.py C:\ProgramData\Anaconda3\envs\Standard C:\ProgramData\Anaconda3\envs\Standard\pythonw.exe C:\ProgramData\Anaconda3\envs\\Standard\Scripts\jupyter-lab-script.py "D:\OneDrive - Queen's University\Python\Projects"
+
+"D:\OneDrive - Queen's University\Python\Projects"
+%ALLUSERSPROFILE%\Anaconda3\Menu\jupyter.ico
+%ALLUSERSPROFILE%\Anaconda3\envs\Standard\Scripts\spyder.ico
+
+

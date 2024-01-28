@@ -1,0 +1,37 @@
+name: base
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - conda
+  - python=3.8
+  - menuinst
+  - console_shortcut
+  - powershell_shortcut
+  - conda-env
+  - conda-build
+  - conda-verify
+  - _ipyw_jlab_nb_ext_conf
+  - anaconda
+  - anaconda-navigator
+  - navigator-updater
+  - ipykernel
+  - nb_conda_kernels
+  - matplotlib
+  - pyodbc
+  - xlwings
+  - pywin32
+  - numpy
+  - pydicom
+  - openpyxl
+  - scipy
+  - pandas
+  - shapely
+  - pysimplegui
+  - networkx
+  - pygraphviz
+  - mypy
+  - pylint
+  - black
+prefix: C:\ProgramData\Anaconda3

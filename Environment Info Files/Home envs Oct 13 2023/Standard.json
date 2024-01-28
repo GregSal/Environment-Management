@@ -1,0 +1,26 @@
+{
+  "channels": [
+    "conda-forge",
+    "bioconda",
+    "defaults"
+  ],
+  "dependencies": [
+    "python=3.11",
+    "numpy",
+    "pysimplegui",
+    "pandas",
+    "matplotlib",
+    "openpyxl",
+    "xlwings",
+    "networkx",
+    "pygraphviz",
+    "shapely",
+    "scipy",
+    "spyder",
+    "jupyterlab",
+    "nb_conda_kernels",
+    "mypy"
+  ],
+  "name": "Standard",
+  "prefix": "C:\\Users\\smoke\\.conda\\envs\\Standard"
+}

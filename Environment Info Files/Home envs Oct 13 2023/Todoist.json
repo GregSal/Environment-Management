@@ -1,0 +1,19 @@
+{
+  "channels": [
+    "conda-forge",
+    "bioconda",
+    "defaults"
+  ],
+  "dependencies": [
+    "python=3.11",
+    "pandas",
+    "jupyterlab",
+    "ipykernel",
+    "pylint",
+    "pysimplegui",
+    "spyder",
+    "xlwings"
+  ],
+  "name": "Todoist",
+  "prefix": "C:\\Users\\smoke\\.conda\\envs\\Todoist"
+}
