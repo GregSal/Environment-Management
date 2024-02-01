@@ -3,6 +3,7 @@ envs/
 /envs *
 .ipynb_checkpoints
 environment
-conda commands/
 *.lnk
 *__pycache__*
+anaconda.7z
+Environment Info Files

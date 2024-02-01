@@ -1,0 +1,11 @@
+channels:
+  - defaults
+  - conda-forge
+envs_dirs:
+  - D:\.conda\envs
+  - D:\anaconda3\envs
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+channel_priority: strict

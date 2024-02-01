@@ -1,0 +1,113 @@
+########### conda config Commands  ##########
+conda config --help
+
+Print the descriptions of all available configuration options to your command line::
+conda config --describe
+
+Add the conda-forge channel::
+conda config --add channels conda-forge
+
+Add the 'conda-forge' channel as a backup to 'defaults'::
+conda config --append channels conda-forge
+
+conda config --describe channel_priority
+
+conda config --add create_default_packages PACKAGENAME1
+########### conda config statements ##########
+Example .condarc statements
+
+channels:
+  - defaults
+  - conda-forge
+  - bioconda
+channel_priority: strict
+envs_dirs:
+  - D:\.conda\envs
+  - D:\anaconda3\envs
+
+
+########## Creation command ############
+conda create --name Structures python=3.8
+
+
+########## Activation command ############
+conda activate Structures
+
+CALL C:\ProgramData\Anaconda3\Scripts\activate.bat C:\ProgramData\Anaconda3
+
+
+########## Install command ############
+conda install -y pandas xlwings
+
+
+########## Store Environment ############
+conda list --explicit > Structures_specfile.txt
+conda env export > Structures_FULL.yml
+conda env export --from-history > Structures.yml
+pip freeze > requirements.txt
+
+
+########## Install command ############
+conda create --name Structures --file "Structures_specfile.txt"
+conda env create --name Structures --file="Structures.yml"
+
+
+########## Jupyter Kernal install command ############
+python -m ipykernel install --user --name sectionaryDev --display-name "Python (sectionaryDev)"
+
+
+########## Update command ############
+conda update conda
+
+--update-all, --all
+
+Update the current environment based on environment file.
+usage: conda env update [-n ENVIRONMENT | -p PATH] [-f FILE] [--prune] [--json] [-v] [-q]
+
+
+########## env config commands ############
+conda env config --append channels conda-forge
+
+conda env config vars list -n my_env
+conda env config vars set MY_VAR=something OTHER_THING=ohhhhya
+conda env config vars unset MY_VAR
+
+
+#### Removing Environment ####
+conda deactivate
+conda remove --name Structures --all
+
+
+########## Spyder Launch ############
+C:\ProgramData\Anaconda3\pythonw.exe C:\ProgramData\Anaconda3\cwp.py C:\ProgramData\Anaconda3\envs\DICOM_Repair_dev C:\ProgramData\Anaconda3\envs\DICOM_Repair_dev\pythonw.exe C:\ProgramData\Anaconda3\envs\DICOM_Repair_dev\Scripts\spyder-script.py
+
+
+########## Jupyter Lab Launch ############
+C:\ProgramData\Anaconda3\python.exe C:\ProgramData\Anaconda3\cwp.py C:\Users\Greg\.conda\envs\DICOM_Repair_dev C:\Users\Greg\.conda\envs\DICOM_Repair_dev\python.exe C:\Users\Greg\.conda\envs\DICOM_Repair_dev\Scripts\jupyter-lab-script.py "W:\Plan Checking\Plan Check Tools"
+
+
+"W:\Plan Checking\Plan Check Tools"
+%ALLUSERSPROFILE%\Anaconda3\Menu\jupyter.ico
+%ALLUSERSPROFILE%\Anaconda3\envs\Standard\Scripts\spyder.ico
+
+
+########## xlwings Configure commands ############
+xlwings config create --force
+xlwings license update -k noncommercial
+xlwings addin install
+
+xlwings addin uninstall
+
+
+########## quickstart Launch ############
+xlwings quickstart myproject.
+xlwings quickstart demo --fastapi
+python -c "import secrets; print(secrets.token_hex(32))"
+set XLWINGS_API_KEY=8ad697bef664e14173558b530096bce0a7a0f3ec1ca9d59698ae5487061beb28
+"\\dkphysicspv1\e$\Gregs_Work\Python Projects\DICOM_Repair_dev\Environment\conda env command DICOM repair.txt"
+
+
+
+
+
+
