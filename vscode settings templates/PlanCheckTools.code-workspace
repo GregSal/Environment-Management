@@ -1,81 +1,144 @@
 {
-	"folders": [
-		{
-			"path": "."
-		}
-	],
-	"settings": {
-		"python.envFile": "${workspaceFolder}/.env",
-		"python.defaultInterpreterPath": "C:/ProgramData/Anaconda3/envs/plan_check_tools/python.exe",
-		"python.analysis.extraPaths": [
-			"../Utilities",
-			"../sectionary/src",
-			"${workspaceFolder}"
-		],
-		"python.autoComplete.extraPaths": [
-			"../Utilities",
-			"../sectionary/src",
-			"${workspaceFolder}"
-		],
-		"jupyter.notebookFileRoot": "${fileDirname}",
-		"jupyter.themeMatplotlibPlots": false,
-		"terminal.integrated.env.windows": {
-			"cwd": "${workspaceFolder}",
-			"PYTHONPATH": "${fileDirname};${workspaceFolder}/../Utilities;${workspaceFolder}/../sectionary/src;${env:PYTHONPATH}",
-		},
-		"terminal.integrated.cwd": "${workspaceFolder}",
-		"terminal.integrated.profiles.windows": {
-			"Conda": {
-			  "path": "C:/WINDOWS/System32/cmd.exe",
-			  "args": ["/K", "C:/ProgramData/Anaconda3/Scripts/activate.bat C:/ProgramData/Anaconda3"],
-			  "icon": "terminal-bash",
-			  "color": "terminal.ansiCyan",
-			  "env": {"PYTHONPATH": "${fileDirname};${workspaceFolder}\\..\\Utilities;${workspaceFolder}\\..\\sectionary\\src;${env:PYTHONPATH}"
-			  }
-			},
-			"CondaPS": {
-				"source": "PowerShell",
-				"args": ["-ExecutionPolicy", "ByPass", "-NoExit", "-Command", "& 'C:/ProgramData/Anaconda3/shell/condabin/conda-hook.ps1' ; conda activate 'C:/ProgramData/Anaconda3'"],
-				"icon": "terminal-powershell",
-				"color": "terminal.ansiCyan",
-			  "PYTHONPATH": "${fileDirname};${workspaceFolder}/../Utilities;${workspaceFolder}/../sectionary/src/sectionary;${env:PYTHONPATH}",
-			  "env": {"PYTHONPATH": "${fileDirname};${workspaceFolder}\\..\\Utilities;${workspaceFolder}\\..\\sectionary\\src;${env:PYTHONPATH}"
-				}
-			},
-			"PythonShell": {
-				"path": "C:/ProgramData/Anaconda3/envs/plan_check_tools/python.exe",
-				"args": [],
-				"icon": "terminal-bash",
-				"color": "terminal.ansiCyan",
-			  "PYTHONPATH": "${fileDirname};${workspaceFolder}/../Utilities;${workspaceFolder}/../sectionary/src/sectionary;${env:PYTHONPATH}",
-			  "env": {"PYTHONPATH": "${fileDirname};${workspaceFolder}\\..\\Utilities;${workspaceFolder}\\..\\sectionary\\src;${env:PYTHONPATH}"
-				}
-			},
-		},
-		"cSpell.words": [
-			"IMRT",
-			"isocenter",
-			"matchplane",
-			"ptrn",
-			"struc"
-		],
-		"editor.fontLigatures": false,
-	},
-	"launch": {
-		"version": "0.2.0",
-		"configurations": [
-			{
-				"name": "Python: Current File",
-				"type": "python",
-				"request": "launch",
-				"program": "${file}",
-				"console": "integratedTerminal",
-				"justMyCode": true,
-				"cwd": "${workspaceFolder}",
-			  "env": {"PYTHONPATH": "${fileDirname};${workspaceFolder}\\..\\Utilities;${workspaceFolder}\\..\\sectionary\\src;${env:PYTHONPATH}"
-				}
-			}
-		]
-
-	},
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "workbench.tree.enableStickyScroll": true,
+        "files.autoSave": "off",
+        "files.autoSaveDelay": 1000,
+        "files.autoSaveWhenNoErrors": true,
+        "python.envFile": "${workspaceFolder}/.env",
+        "python.defaultInterpreterPath": "C:/ProgramData/Anaconda3/envs/plan_check_tools/python.exe",
+        "python.analysis.extraPaths": [
+            "../Utilities",
+            "../sectionary/src",
+            "${workspaceFolder}"
+        ],
+        "python.autoComplete.extraPaths": [
+            "../Utilities",
+            "../sectionary/src",
+            "${workspaceFolder}"
+        ],
+        "jupyter.notebookFileRoot": "${fileDirname}",
+        "jupyter.themeMatplotlibPlots": false,
+        "notebook.experimental.variablesView": true,
+        "terminal.integrated.enableMultiLinePasteWarning":"never",
+        "terminal.integrated.env.windows": {
+            "cwd": "${workspaceFolder}",
+            "PYTHONPATH": "${fileDirname};${workspaceFolder}/../Utilities;${workspaceFolder}/../sectionary/src;${env:PYTHONPATH}",
+        },
+        "terminal.integrated.cwd": "${workspaceFolder}",
+        "terminal.integrated.profiles.windows": {
+            "Conda": {
+                "path": "C:/WINDOWS/System32/cmd.exe",
+                "args": [
+                    "/K",
+                    "C:/ProgramData/Anaconda3/Scripts/activate.bat C:/ProgramData/Anaconda3 & conda activate plan_check_tools"
+                ],
+                "icon": "terminal-bash",
+                "color": "terminal.ansiCyan",
+                "env": {
+                    "PYTHONPATH": "${fileDirname};${workspaceFolder}\\..\\Utilities;${workspaceFolder}\\..\\sectionary\\src;${env:PYTHONPATH}"
+                }
+            },
+            "CondaPS": {
+                "source": "PowerShell",
+                "args": [
+                    "-ExecutionPolicy",
+                    "ByPass",
+                    "-NoExit",
+                    "-Command",
+                    "& 'C:/ProgramData/Anaconda3/shell/condabin/conda-hook.ps1' ; conda activate 'plan_check_tools'",
+                ],
+                "icon": "terminal-powershell",
+                "color": "terminal.ansiCyan",
+                "PYTHONPATH": "${fileDirname};${workspaceFolder}/../Utilities;${workspaceFolder}/../sectionary/src/sectionary;${env:PYTHONPATH}",
+                "env": {
+                    "PYTHONPATH": "${fileDirname};${workspaceFolder}\\..\\Utilities;${workspaceFolder}\\..\\sectionary\\src;${env:PYTHONPATH}"
+                }
+            },
+            "PythonShell": {
+                "path": "C:/ProgramData/Anaconda3/envs/plan_check_tools/python.exe",
+                "args": [],
+                "icon": "terminal-bash",
+                "color": "terminal.ansiCyan",
+                "PYTHONPATH": "${fileDirname};${workspaceFolder}/../Utilities;${workspaceFolder}/../sectionary/src/sectionary;${env:PYTHONPATH}",
+                "env": {
+                    "PYTHONPATH": "${fileDirname};${workspaceFolder}\\..\\Utilities;${workspaceFolder}\\..\\sectionary\\src;${env:PYTHONPATH}"
+                }
+            },
+        },
+        "terminal.integrated.automationProfile.windows": {
+            "path": "C:\\WINDOWS\\System32\\cmd.exe",
+            "cursorStyle": "line",
+            "args": [
+                "/K",
+                "C:\\ProgramData\\Anaconda3\\Scripts\\activate.bat C:\\ProgramData\\Anaconda3 & conda activate plan_check_tools"
+            ],
+            "icon": "terminal-bash",
+            "color": "terminal.ansiCyan"
+        },
+        "python.terminal.activateEnvInCurrentTerminal": true,
+        "terminal.integrated.defaultProfile.windows": "CondaPS",
+        "cSpell.words": [
+            "eqsq",
+            "IMRT",
+            "isocenter",
+            "matchplane",
+            "ptrn",
+            "struc"
+        ],
+        "editor.fontLigatures": false,
+        "todohighlight.keywords": [
+            "DEBUG:",
+            "REVIEW:",
+            {
+                "text": "NOTE",
+                "color": "#ff0000",
+                "backgroundColor": "yellow",
+                "overviewRulerColor": "grey"
+            },
+            {
+                "text": "FIXME",
+                "color": "red",
+                "border": "1px solid red",
+                "borderRadius": "2px",
+                //NOTE: using borderRadius along with `border` or you will see nothing change
+                "backgroundColor": "rgba(0,0,0,.2)"
+                //other styling properties goes here ...
+            },
+            {
+                "text": "TODO",
+                "color": "#ff0000",
+                "backgroundColor": "#87CEFA",
+                "overviewRulerColor": "yellow"
+            },
+            {
+                "text": "Done To Here",
+                "color": "#000",
+                "backgroundColor": "#00FF00",
+                "overviewRulerColor": "yellow",
+                "fontWeight": "bold"
+            },
+        ],
+    },
+    "launch": {
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "name": "Python: Current File",
+                "type": "debugpy",
+                "request": "launch",
+                "program": "${file}",
+                "console": "integratedTerminal",
+                "justMyCode": true,
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "PYTHONPATH": "${fileDirname};${workspaceFolder}\\..\\Utilities;${workspaceFolder}\\..\\sectionary\\src;${env:PYTHONPATH}"
+                }
+            }
+        ]
+    },
 }
