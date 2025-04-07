@@ -1,5 +1,33 @@
 {
     "cSpell.words": [
         "levelname"
-    ]
+    ],
+    "notebook.compactView": false,
+    "notebook.consolidatedRunButton": true,
+    "notebook.outline.showCodeCells": true,
+    "notebook.diff.ignoreMetadata": true,
+    "notebook.diff.ignoreOutputs": true,
+    "notebook.lineNumbers": "on",
+    "notebook.cellToolbarLocation": {
+      "default": "right",
+      "jupyter-notebook": "left"
+    },
+    "notebook.cellFocusIndicator": "border",
+    "notebook.showFoldingControls": "always",
+
+    "chat.agent.enabled": true,
+    "github.copilot.chat.newWorkspaceCreation.enabled": false,
+    "github.copilot.chat.editor.temporalContext.enabled": true,
+    "github.copilot.chat.localeOverride": "en",
+    "github.copilot.chat.scopeSelection": true,
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "github.copilot.chat.codesearch.enabled": true,
+    "github.copilot.chat.codeGeneration.instructions": [
+      {"language": "python", "text": "Use single quote marks for strings"},
+      {"language": "python", "text": "Use f-string for string formatting"},
+      {"language": "python", "text": "Use str.join() for string concatenation"},
+      {"language": "python", "text": "Use google style doc strings"},
+      {"language": "python", "text": "Don't add a newline at the beginning of a doc string"},
+    ],
+    "python.analysis.aiCodeActions": {},
 }
